@@ -1,9 +1,9 @@
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
 import type {
   Method,
   AxiosInstance,
   AxiosHeaders,
-  AxiosRequestConfig,
   InternalAxiosRequestConfig,
   AxiosError,
   AxiosResponse
@@ -28,6 +28,7 @@ const request = <T>({
   loading = true,
   rawResponse = false
 }: RequestOptions<T>) => {
+//   const dispatch = useDispatch()
   // 创建 axios 实例
   const instance: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_SERVER_BASEURL,

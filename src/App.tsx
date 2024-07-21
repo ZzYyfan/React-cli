@@ -1,26 +1,15 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import { Button } from 'antd'
-
-const Home = () => {
-  return <h2>Home</h2>
-}
-
-const About = () => {
-  return <h2>About</h2>
-}
+import { useSelector } from 'react-redux'
+import { Button, Spin } from 'antd'
+import type { RoutState } from '@/store/index'
 
 const App = () => {
+  const loading = useSelector((state: RoutState) => state.system.loading)
   return (
-    <Router>
-      <Link to='/'>Home</Link>
-      <Link to='/about'>About</Link>
+    <>
       <Button type='primary'>Button</Button>
-      <Routes>
-        <Route path='/about' element={<About />} />
-        <Route path='/' element={<Home />} />
-      </Routes>
-    </Router>
+      <Spin tip='加载中' spinning={loading} />
+    </>
   )
 }
 
