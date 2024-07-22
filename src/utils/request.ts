@@ -1,9 +1,11 @@
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
+import to from 'await-to-js'
+import { updateLoading } from '@/store/system/index'
+import store from '@/store'
 import type {
   Method,
-  AxiosInstance,
   AxiosHeaders,
+  AxiosInstance,
   InternalAxiosRequestConfig,
   AxiosError,
   AxiosResponse
@@ -18,8 +20,8 @@ interface RequestOptions<T> {
   loading?: boolean // 是否展示loading 默认为true
   rawResponse?: boolean // 是否返回完整的response对象 默认为false
 }
-
-const request = <T>({
+// 请求实例
+const requestInstance = <T>({
   method,
   url,
   params,
@@ -27,9 +29,8 @@ const request = <T>({
   headers,
   loading = true,
   rawResponse = false
-}: RequestOptions<T>) => {
-//   const dispatch = useDispatch()
-  // 创建 axios 实例
+}: RequestOptions<T>): Promise<T> => {
+  // axios实例
   const instance: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_SERVER_BASEURL,
     headers: {
@@ -37,22 +38,44 @@ const request = <T>({
     },
     timeout: 60000
   })
-  // 请求拦截器
+  // 请求拦截
   instance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
+      if (loading) {
+        store.dispatch(updateLoading(true))
+      }
       return config
     },
     (error: AxiosError) => {
+      if (loading) {
+        store.dispatch(updateLoading(false))
+      }
       return Promise.reject(error)
     }
   )
-  // 响应拦截器
+  // 响应拦截
   instance.interceptors.response.use(
     (response: AxiosResponse) => {
-      return response
+      if (loading) {
+        store.dispatch(updateLoading(false))
+      }
+      const data = response.data
+      const { code: resCode, data: resData, msg: resMsg } = data
+      if (resCode === 200) {
+        return rawResponse ? response : data
+      } else {
+        return Promise.reject({
+          code: resCode,
+          msg: resMsg,
+          data: resData
+        })
+      }
     },
-    (err: AxiosError) => {
-      return Promise.reject(err)
+    (error: AxiosError) => {
+      if (loading) {
+        store.dispatch(updateLoading(false))
+      }
+      return Promise.reject(error)
     }
   )
   return new Promise<T>((resolve, reject) => {
@@ -61,4 +84,15 @@ const request = <T>({
       .then((res) => resolve(rawResponse ? res : res.data))
       .catch((err) => reject(err))
   })
+}
+export const request = <T>({
+  method,
+  url,
+  params,
+  data,
+  headers,
+  loading = true,
+  rawResponse = false
+}: RequestOptions<T>) => {
+  return to<T>(requestInstance({ method, url, params, data, headers, loading, rawResponse }))
 }
