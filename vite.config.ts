@@ -10,5 +10,14 @@ export default defineConfig({
       '@': join(__dirname, './src')
     }
   },
-  plugins: [react()]
+  plugins: [react()],
+  server: {
+    proxy: {
+      // '/api': {
+      //   target: 'http://172.17.0.4:8081',
+      //   changeOrigin: true,
+      //   rewrite: (path) => path.replace(/^\/api/, '')
+      // }
+    }
+  }
 })

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import to from 'await-to-js'
-import { updateLoading } from '@/store/system/index'
+import { updateLoading } from '@/store/system'
 import store from '@/store'
 import type {
   Method,
@@ -14,8 +14,8 @@ import type {
 interface RequestOptions<T> {
   method: Method // 请求方法
   url: string // 请求地址
-  params?: T // 请求头参数
-  data?: T // 请求体参数
+  params?: object // 请求头参数
+  data?: object // 请求体参数
   headers?: AxiosHeaders // 请求头
   loading?: boolean // 是否展示loading 默认为true
   rawResponse?: boolean // 是否返回完整的response对象 默认为false
@@ -44,6 +44,7 @@ const requestInstance = <T>({
       if (loading) {
         store.dispatch(updateLoading(true))
       }
+      config.headers.Authorization = import.meta.env.VITE_TOKEN
       return config
     },
     (error: AxiosError) => {
@@ -61,7 +62,7 @@ const requestInstance = <T>({
       }
       const data = response.data
       const { code: resCode, data: resData, msg: resMsg } = data
-      if (resCode === 200) {
+      if (resCode === 1000) {
         return rawResponse ? response : data
       } else {
         return Promise.reject({
