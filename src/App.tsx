@@ -44,7 +44,7 @@ const App = () => {
     backgroundColor: '#1677ff'
   }
   const layoutStyle = {
-    borderRadius: 8,
+    // borderRadius: 8,
     overflow: 'hidden',
     width: '100%',
     maxWidth: '100%'
@@ -53,7 +53,7 @@ const App = () => {
     <Layout style={layoutStyle}>
       <Header style={headerStyle}>Header</Header>
       <Layout>
-        <Sider width='25%' style={siderStyle}>
+        <Sider width='10%' style={siderStyle}>
           Sider
         </Sider>
         <Content style={contentStyle}>Content</Content>
