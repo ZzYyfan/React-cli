@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import systemReducer from './system/index'
+import menuReducer from './menu/index'
 
 const store = configureStore({
   reducer: {
-    system: systemReducer
+    system: systemReducer,
+    menu: menuReducer
   }
 })
 

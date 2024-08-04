@@ -10,6 +10,13 @@ export default defineConfig({
       '@': join(__dirname, './src')
     }
   },
+  css: {
+    preprocessorOptions: {
+      less: {
+        javascriptEnabled: true
+      }
+    }
+  },
   plugins: [react()],
   server: {
     proxy: {

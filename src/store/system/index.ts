@@ -10,8 +10,8 @@ const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
-    updateLoading(state, action: PayloadAction<boolean>) {
-      state.loading = action.payload
+    updateLoading(state: SystemState, { payload }: PayloadAction<boolean>) {
+      state.loading = payload
     }
   }
 })
