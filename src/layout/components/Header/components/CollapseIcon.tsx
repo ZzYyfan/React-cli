@@ -15,3 +15,5 @@ const CollapseIcon = () => {
     </div>
   )
 }
+
+export default CollapseIcon
