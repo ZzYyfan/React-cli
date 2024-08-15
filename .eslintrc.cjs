@@ -30,6 +30,7 @@ module.exports = {
     'prettier/prettier': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
+    "@typescript-eslint/no-explicit-any": "off",
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     'no-var': 'error',
     'no-empty': ['error', { allowEmptyCatch: true }],

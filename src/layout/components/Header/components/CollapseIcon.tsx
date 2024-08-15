@@ -10,7 +10,7 @@ const CollapseIcon = () => {
     dispatch(updateCollapse(!isCollapse))
   }
   return (
-    <div onClick={handleIconClick}>
+    <div style={{ height: '50px' }} onClick={handleIconClick}>
       {isCollapse ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
     </div>
   )

@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { Button, Spin } from 'antd'
-import type { RoutState } from '@/store'
-import LayoutIndex from '@/layout'
+import React from 'react'
+import Router from '@/routers/index'
+import { HashRouter } from 'react-router-dom'
+import { ConfigProvider } from 'antd'
+import zhCN from 'antd/es/locale/zh_CN'
 
 const App = () => {
-  const { loading } = useSelector((state: RoutState) => state.system)
   return (
-    <>
-      {/*<Spin tip='加载中' spinning={loading} />*/}
-      <LayoutIndex />
-    </>
+    <HashRouter>
+      <ConfigProvider locale={zhCN}>
+        <Router />
+      </ConfigProvider>
+    </HashRouter>
   )
 }
 
