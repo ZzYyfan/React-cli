@@ -15,7 +15,7 @@ const LayoutIndex = () => {
       <Layout>
         <Sider
           style={{
-            height: 'calc(100vh - 64px)',
+            height: 'calc(100vh - 50px)',
             overflowY: 'scroll',
             scrollbarWidth: 'thin'
           }}

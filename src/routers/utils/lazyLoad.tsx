@@ -20,3 +20,5 @@ const lazyLoad = (Comp: React.LazyExoticComponent<any>): React.ReactNode => {
     </Suspense>
   )
 }
+
+export default lazyLoad
