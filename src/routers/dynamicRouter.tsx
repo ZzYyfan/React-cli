@@ -37,7 +37,7 @@ const importElement = (component: string): React.ReactNode => {
   if (['layout'].includes(component)) {
     return lazyLoad(React.lazy(() => import('@/layout')))
   } else {
-    return lazyLoad(React.lazy(() => import(`@/views/${component}`)))
+    return lazyLoad(React.lazy(() => import(`@/views/${component}/index.tsx`)))
   }
 }
 // 处理菜单数据用于路由懒加载
