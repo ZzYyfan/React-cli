@@ -1,14 +1,13 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { RouteObject, useRoutes } from 'react-router'
+import { HashRouter } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { getMenu } from '@/service/system'
 import lazyLoad from './utils/lazyLoad'
-import type { MenuProps } from 'antd'
 import { updateMenuList } from '@/store/menu'
-import LayoutIndex from '@/layout'
-import type { Dispatch, UnknownAction } from 'redux'
-import type { RouteObject } from 'react-router'
+import type { MenuProps } from 'antd'
 
 type MenuItem = Required<MenuProps>['items'][number]
-
 // 处理菜单数据用于redux存储
 const handleMenu = (data: System.MenuItem[]): MenuItem[] => {
   // 遍历处理接口返回菜单数据
@@ -48,7 +47,7 @@ const handleDynamicMenu = (data: System.MenuItem[]): RouteObject[] => {
       return {
         element: importElement(component),
         id: String(id),
-        path,
+        path
         // children: item.children.map((i) => mapArr(i))
       }
     } else {
@@ -64,17 +63,46 @@ const handleDynamicMenu = (data: System.MenuItem[]): RouteObject[] => {
     return mapArr(menuItem)
   })
 }
-const dynamicRouter = async (dispatch: Dispatch<UnknownAction>): Promise<RouteObject[]> => {
-  const [err, res] = await getMenu({
-    clientId: '50952a25bf3a897d1b1f89fbe9f081bb',
-    userId: 'super_admin'
-  })
-  if (res) {
-    dispatch(updateMenuList(handleMenu(res)))
-    return handleDynamicMenu(res)
-  } else {
-    return []
+
+const Router = () => {
+  const dispatch = useDispatch()
+  const [routerList, setRouterList] = useState<System.MenuItem[]>([])
+  const dynamicRouter = async () => {
+    console.log('star--->')
+    const [err, res] = await getMenu({
+      clientId: '50952a25bf3a897d1b1f89fbe9f081bb',
+      userId: 'super_admin'
+    })
+    console.log('end--->')
+    if (res) {
+      dispatch(updateMenuList(handleMenu(res)))
+      setRouterList(res)
+    } else {
+      return []
+    }
   }
+  useEffect(() => {
+    dynamicRouter()
+  }, [])
+  const Routes = () =>
+    useRoutes([
+      {
+        element: lazyLoad(React.lazy(() => import('@/layout'))),
+        children: [
+          {
+            path: '/',
+            element: lazyLoad(React.lazy(() => import('@/views/test')))
+          }
+        ]
+      },
+      ...handleDynamicMenu(routerList)
+    ])
+  console.log('router')
+  return (
+    <HashRouter>
+      <Routes />
+    </HashRouter>
+  )
 }
 
-export default dynamicRouter
+export default Router
